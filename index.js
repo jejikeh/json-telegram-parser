@@ -4,32 +4,26 @@ var numChat = 0
 fs.readFile('result.json',
 
     function(err,data){
-        var jsonData = data;
-        var jsonParsed = JSON.parse(jsonData);
+        var jsonParsed = JSON.parse(data);
         for(var i = 0; i < Object.keys(jsonParsed.chats.list[numChat].messages).length; i++){
-            if(jsonParsed.chats.list[numChat].messages[i].text == "" && jsonParsed.chats.list[numChat].messages[i].sticker_emoji != null && !Array.isArray(jsonParsed.chats.list[numChat].messages[i].text) ){
-                fs.appendFileSync('messages.txt',jsonParsed.chats.list[numChat].messages[i].sticker_emoji, function (err){
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        console.log("cemf");
+            if(!Array.isArray(jsonParsed.chats.list[numChat].messages[i].text)){
+                console.log(jsonParsed.chats.list[numChat].messages[i].text)
+                fs.appendFileSync('messages.txt',jsonParsed.chats.list[numChat].messages[i].text + " \n", function(err){
+                    if(err){
+                        console.log(err.toString());
+                    }else {
+                        return 0;
                     }
-                })
-            }else if(jsonParsed.chats.list[numChat].messages[i].text != null){
-                if(jsonParsed.chats.list[numChat].messages[i].text.text != null){
-                    return 0;
-                }else {
-                    fs.appendFileSync('messages.txt',toString(jsonParsed.chats.list[numChat].messages[i].text), function (err){
-                        if (err) {
-                            console.log(err);
-                        } else {
-                            console.log("cemf");
+                });
+                }else if (jsonParsed.chats.list[numChat].messages[i].sticker_emoji == !null){
+                    fs.appendFileSync('messages.txt',jsonParsed.chats.list[numChat].messages[i].sticker_emoji, function(err){
+                        if(err){
+                            console.log(err.toString());
+                        }else {
+                            return 0;
                         }
-                    
-                })
+                    });
+                }
+            }
         }
-    }
-    }
-}
-
 )
